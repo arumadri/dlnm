@@ -7,6 +7,7 @@
 \usepackage{bm}
 \usepackage{amsmath}
 \usepackage{mathtools}
+\usepackage{arydshln}
 \usepackage{annotate-equations}
 \pgfkeys{/eqnannotate/label right/.code=\text{}}
 \usepackage{caption}
@@ -636,20 +637,310 @@
 
 which forms the \textbf{\alertblue{crossbasis}}:
 
-\[s(q_{x_t}; \beta) = (1_{v_x v_\ell} A_{x_t}) \beta = w_{x_t} \beta\]
+\[s(q_{x_t}; \beta) = (1_{v_x.v_\ell} A_{x_t}) \beta = w_{x_t} \beta\]
 
     \item \textbf{\alertblue{The problem reduces to choosing a basis for each \( q_{x_t} \) and \( \ell \)}}, defining \textbf{\alertblue{exposure-response}} and \textbf{\alertblue{lag-response}} functions, respectively
 \end{itemize}
 \end{frame}
+\section{Crossbasis}
+\begin{frame}{Basis for exposure space}
+    \begin{itemize}
+        \item Given, \(Q_x\) (timeseries of exposure X) and assuming a maximum lag of 2,  we can compute, \(Q_{xt}\) (vector of lagged exposure histories of X)
+        \item Applying \textbf{linear transformation} to \( Q_{xt} \) to get 
+        \( R_{xt}\) (lagged occurrences of each of the basis variables of X)
+    \end{itemize}
+    \vspace{0.5cm}
+\[
+\begin{array}{c|c}
+    t & {x} \\ \hline
+    1 & 10  \\
+    2 & 20  \\
+    3 & 30  \\
+    4 & 40  \\
+    5 & 50  
+\end{array} 
+\Rightarrow 
+\begin{array}{c|c|c|c}
+    t & \textbf{lag 0} & \textbf{lag 1} & \textbf{lag 2} \\ \hline
+    1 & 10  & NA & NA \\
+    2 & 20  & 10 & NA \\
+    3 & 30  & 20 & 10 \\
+    4 & 40  & 30 & 20 \\
+    5 & 50  & 40 & 30  
+\end{array}
+R_{xt}\Rightarrow  
+\begin{bmatrix}
+10 & NA & NA \\
+20 & 10 & NA \\
+30 & 20 & 10 \\
+40 & 30 & 20 \\
+50 & 40 & 30
+\end{bmatrix}
+\]
+\end{frame}
 
-%\section{Examples}
-%\begin{frame}{Example 1}
+\begin{frame}{Basis for lag Space}
+    \begin{itemize}
+        \item Applying \textbf{polynomial transformation} of degree 2 to the lag vector, \(\ell\)(0,1,2)
+        \item First step is to scale the lag vector by dividing by the maximum lag:
+        \[
+        (0,1,2)/2 \Rightarrow (0, 0.5, 1)
+        \]
+        \item Applying polynomial transformation to the lag vector \(\ell\), to obtain C (basis variables for each lag for degrees d = 0,1,2)
+    \end{itemize}
+    \vspace{0.5cm}
+\[
+\begin{array}{c|c|c|c}
+    x^d & x^0 & x^1 & x^2 \\ \hline
+    \text{lag 0}[0] & 1  & 0   & 0   \\
+    \text{lag 1}[0.5] & 1  & 0.5 & 0.25 \\
+    \text{lag 2}[1] & 1  & 1   & 1   
+\end{array}
+C \Rightarrow 
+\begin{bmatrix}
+1 & 0 & 0 \\
+1 & 0.5 & 0.25 \\
+1 & 1 & 1
+\end{bmatrix}
+\]
+\end{frame}
+
+\begin{frame}{Special Tensor Product}
+\begin{equation*}
+    \eqnmark[blue]{node1}{A_{xt}} =
+    (\eqnmark[brown]{node2}{1_{vl}}
+    \eqnmark[black]{node3}{\otimes} 
+    \eqnmark{node4}{R_{xt}})
+    \eqnmark[black]{node5}{\odot} 
+    (\eqnmark{node6}{C} 
+    \eqnmark[black]{node7}{\otimes} 
+    \eqnmark[orange]{node8}{1_{vx}})
+\end{equation*}
+    \annotate[yshift=0.5em]{above, right}{node3}{Kronecker product (matrix direct product)}
+    \annotate[yshift=-0.5em]{below, left}{node5}{Hadamard product (element-wise product)}
+\vspace{0.5cm}
+\begin{itemize}
+    \item \( 1_{vx}\): Vector of 1's of dimensional length of exposure
+\[
+\begin{array}{cccc}
+    t & Q_x & & \\ \hline
+    1 & 10 & & \\
+    2 & 20 & & \\
+    3 & 30 & & \\
+    4 & 40 & & \\
+    5 & 50 & & \\
+\end{array}
+1_{vl} \Rightarrow 
+\begin{bmatrix}
+    1 \\
+    1 \\
+    1 \\
+    1 \\
+    1 \\
+\end{bmatrix}
+\]
+    \item \( 1_{vl}\): Vector of 1's of dimensional length of lag vector
+\[ c(0,1,2), 1_{vl} \Rightarrow  [1,1,1] \]
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Special Tensor Product}
+\begin{itemize}
+    \item The first part \(1_{vl} \otimes R_{xt}\) makes copies of each exposure basis per lag 
+\end{itemize}
+\footnotesize
+\[ 
+[1,1,1] \otimes \begin{bmatrix}
+10 & NA & NA \\
+20 & 10 & NA \\
+30 & 20 & 10 \\
+40 & 30 & 20 \\
+50 & 40 & 30
+\end{bmatrix} \Rightarrow
+\begin{bmatrix} 
+1 \cdot R_{xt}[i] \\ 
+1 \cdot R_{xt}[i] \\ 
+1 \cdot R_{xt}[i] 
+\end{bmatrix}
+=\begin{bmatrix}
+10 & 10 & 10 \\
+20 & 20 & 20 \\
+30 & 30 & 30 \\
+40 & 40 & 40 \\
+50 & 50 & 50 \\ \hdashline
+NA & NA & NA \\
+10 & 10 & 10 \\
+20 & 20 & 20 \\
+30 & 30 & 30 \\
+40 & 40 & 40 \\ \hdashline
+NA & NA & NA \\
+NA & NA& NA \\
+10 & 10 & 10 \\
+20 & 20 & 20 \\
+30 & 30 & 30 \\ 
+\end{bmatrix}
+\]
+\end{frame}
+
+\begin{frame}{Special Tensor Product}
+\begin{itemize}
+    \item The second part \(C \otimes 1_{vx}\) makes copies of each lag basis per exposure
+\end{itemize}
+\footnotesize
+\[ 
+\begin{bmatrix}
+1 & 0 & 0 \\
+1 & 0.5 & 0.25 \\
+1 & 1 & 1
+\end{bmatrix} \otimes \begin{bmatrix}
+    1 \\
+    1 \\
+    1 \\
+    1 \\
+    1
+\end{bmatrix}
+\Rightarrow
+\begin{bmatrix} 
+C[i] \cdot 1 \\ 
+C[i] \cdot 1 \\ 
+C[i] \cdot 1 \\
+C[i] \cdot 1 \\
+C[i] \cdot 1
+\end{bmatrix}
+=\begin{bmatrix}
+1 & 0 & 0 \\
+1 & 0 & 0 \\
+1 & 0 & 0 \\
+1 & 0 & 0 \\
+1 & 0 & 0 \\ \hdashline
+1 & 0.5 & 0.25 \\
+1 & 0.5 & 0.25 \\
+1 & 0.5 & 0.25 \\
+1 & 0.5 & 0.25 \\
+1 & 0.5 & 0.25 \\ \hdashline
+1 & 1 & 1 \\
+1 & 1 & 1 \\
+1 & 1 & 1 \\
+1 & 1 & 1 \\
+1 & 1 & 1 \\ 
+\end{bmatrix}
+\]
+\end{frame}
+
+\begin{frame}{Special Tensor Product}
+\begin{itemize}
+    \item Element-wise multiplication of the first part and second part (\(1_{vl} \otimes R_{xt}\)) \(\odot\) (\(C \otimes 1_{vx}\)) results into;
+\end{itemize}
+\footnotesize
+\[
+\begin{bmatrix}
+10 & 10 & 10 \\
+20 & 20 & 20 \\
+30 & 30 & 30 \\
+40 & 40 & 40 \\
+50 & 50 & 50 \\ \hdashline
+NA & NA & NA \\
+10 & 10 & 10 \\
+20 & 20 & 20 \\
+30 & 30 & 30 \\
+40 & 40 & 40 \\ \hdashline
+NA & NA & NA \\
+NA & NA& NA \\
+10 & 10 & 10 \\
+20 & 20 & 20 \\
+30 & 30 & 30 \\ 
+\end{bmatrix} \odot \begin{bmatrix}
+1 & 0 & 0 \\
+1 & 0 & 0 \\
+1 & 0 & 0 \\
+1 & 0 & 0 \\
+1 & 0 & 0 \\ \hdashline
+1 & 0.5 & 0.25 \\
+1 & 0.5 & 0.25 \\
+1 & 0.5 & 0.25 \\
+1 & 0.5 & 0.25 \\
+1 & 0.5 & 0.25 \\ \hdashline
+1 & 1 & 1 \\
+1 & 1 & 1 \\
+1 & 1 & 1 \\
+1 & 1 & 1 \\
+1 & 1 & 1 \\ 
+\end{bmatrix} \Rightarrow A_{xt} = \begin{bmatrix}
+10 & 0 & 0 \\
+20 & 0 & 0 \\
+30 & 0 & 0 \\
+40 & 0 & 0 \\
+50 & 0 & 0 \\ \hdashline
+NA & NA & NA \\
+10 & 5 & 2.5 \\
+20 & 10 & 5 \\
+30 & 15 & 7.5 \\
+40 & 20 & 10 \\ \hdashline
+NA & NA & NA \\
+NA & NA & NA \\
+10 & 10 & 10 \\
+20 & 20 & 20 \\
+30 & 30 & 30 \\
+\end{bmatrix}
+\]
+\end{frame}
+
+\begin{frame}{Special Tensor Product}
+\begin{itemize}
+    \item From Gasparrini et al. 2010 "... array \(A_{xt}\) than re-arranged \textbf{\alertblue{summing along the third dimension of lags}} to obtain the final matrix of cross-basis functions, \(w_{xt}\)."
+\end{itemize}
+\vspace{0.3cm}
+\[
+\Rightarrow 
+\begin{bmatrix}
+10 & 0 & 0 \\
+20 & 0 & 0 \\
+30 & 0 & 0 \\
+40 & 0 & 0 \\
+50 & 0 & 0 \\ 
+\end{bmatrix} \oplus
+\begin{bmatrix}
+NA & NA & NA \\
+10 & 5 & 2.5 \\
+20 & 10 & 5 \\
+30 & 15 & 7.5 \\
+40 & 20 & 10 \\ 
+\end{bmatrix} \oplus
+\begin{bmatrix}
+NA & NA & NA \\
+NA & NA & NA \\
+10 & 10 & 10 \\
+20 & 20 & 20 \\
+30 & 30 & 30 \\
+\end{bmatrix}
+\]
+\begin{itemize} 
+    \item E.g for [1,1] 10 + NA + NA = NA; [5,1] 50 + 40 + 30 = 120
+\end{itemize}
+\[ w_{xt} =
+\begin{bmatrix}
+NA & NA & NA \\
+NA & NA & NA \\
+60 & 20 & 15 \\
+90 & 35 & 27.5 \\
+120 & 50 & 40 \\
+\end{bmatrix} \Rightarrow w_{xt}\beta
+\]
+\end{frame}
+
+\begin{frame}{Cross-basis matrix}
+\centering
+    \includegraphics[width=9cm,keepaspectratio]{images/crossbasis_result.png}
+\end{frame}
+
+\section{Examples}
+\begin{frame}{Example 1}
     
-%\end{frame}
-%\section{Use Cases}
-%\begin{frame}{Use Cases}
+\end{frame}
+\section{Use Cases }
+\begin{frame}{Use Cases}
     
-%\end{frame}
+\end{frame}
 
 
 \end{document}
