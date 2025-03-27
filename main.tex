@@ -1,20 +1,13 @@
 \documentclass[english]{beamer}
 \usetheme{JuanLesPins}
-\usepackage{graphicx} 
-\graphicspath{ {./images/} }
-\usepackage{graphicx}
-\usepackage{tikz}
-\usepackage{bm}
-\usepackage{amsmath}
-\usepackage{mathtools}
-\usepackage{arydshln}
-\usepackage{annotate-equations}
+\usepackage{graphicx, tikz, bm, amsmath, mathtools, arydshln, annotate-equations, caption, wasysym} 
+\usepackage[style=authoryear, backend=biber]{biblatex}
+\addbibresource{./references/references.bib} 
+\graphicspath{{./images/}}
 \pgfkeys{/eqnannotate/label right/.code=\text{}}
-\usepackage{caption}
 \captionsetup[figure]{labelformat=empty}
 \newcommand{\alertblue}[1]{{\color{blue}#1}}
 \newcommand{\alertgreen}[1]{{\color{green}#1}}
-\usepackage{wasysym}
 \usetikzlibrary{positioning, tikzmark}
 \usecolortheme{seahorse}
 \setbeamercolor{alerted text}{fg=blue}
@@ -933,14 +926,38 @@ NA & NA & NA \\
     \includegraphics[width=9cm,keepaspectratio]{images/crossbasis_result.png}
 \end{frame}
 
-\section{Examples}
+\section{Application}
 \begin{frame}{Example 1}
-    
+\begin{itemize}
+    \item Effect of temperature on overall mortality in New York City, during the period 1987–2000
+\end{itemize}
+\centering
+    \includegraphics[width=6cm,keepaspectratio]{images/dlnm_example_1.png}
+\end{frame}
+\begin{frame}{Example 2}
+    \begin{itemize}
+        \item Effect of rainfall and temperature on dengue risk in Barbados  during the period 1999-2016
+    \end{itemize}
+\centering
+    \includegraphics[width=10.5cm,keepaspectratio]{images/dlnm_example_2.png}    
 \end{frame}
 \section{Use Cases }
-\begin{frame}{Use Cases}
-    
+\begin{frame}{Alternative Study Designs}
+    \centering
+    \includegraphics[width=9cm,keepaspectratio]{images/use_cases.png}
 \end{frame}
-
+\begin{frame}{References}
+    \begin{itemize}
+        \item \cite{gasparrini_distributed_2010}
+        \item \cite{gasparrini_distributed_2011}
+        \item\cite{gareth_james__daniela_witten__trevor_hastie_introduction_nodate}
+        \item \cite{gasparrini_attributable_2014}
+        \item \cite{asenmacher_exposure-lag-response_2016}
+        \item \cite{lowe_nonlinear_2018}
+    \end{itemize}
+    \vspace{1em} % Add some space above
+    \centering
+    \textbf{\large Thank You!}
+\end{frame}
 
 \end{document}
