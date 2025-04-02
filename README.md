@@ -1,7 +1,5 @@
 # Distributed Lag Non-linear Models (DLNMs)
-## Methodology and Application for Time-series Data Analysis 
-
-### Welcome! 
+## Welcome! 
 
 I will share my way through figuring out this confusing, complicated, and, frankly, cutting-edge modeling and statistics for anyone who may need to understand the methodology and its application to time-series data analysis. 
 
