@@ -9,10 +9,11 @@ Distributed lag non-linear models (DLNMs) are a modelling framework used to desc
 Look out for a blogpost coming soon on this!
 
 ## Files 
-+ `images` images used in the presentation. 
++ `images` images used in the presentation.
++ `output` pdf of slides. 
 + `references` material for used in the preparation of the slides, including books, articles and a thesis.
 + `main.tex` latex code for generating the presentation slides.
-+ `output` pdf of slides. 
+
 
 ## Contact details 
 Please email [v.arumadri@erasmusmc.nl](mailto:v.arumadri@erasmusmc.nl) with any questions or additions.
