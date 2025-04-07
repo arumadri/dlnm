@@ -52,475 +52,19 @@
 \end{frame}
 %------------------------------------------------
 \section{Introduction}
-\begin{frame}{Key definitions}
-   \begin{itemize}
-    \item \alertblue{Non-linear data structure}: data where there is no linear relationship between a dependent (\alertblue{outcome/response}) and an independent (\alertblue{exposure/predictor}) variable
-    \item \alertblue{Time series data}: a \alertblue{sequence of data points collected over an interval of time} e.g daily rainfall measurements, weekly sales 
-    \item \alertblue{Lag}: time difference between two observations in a sequence, or the \alertblue{number of steps back in time (delay) a past observation is from the current time}
-    \end{itemize}
-    \vspace{0.15cm}
+\begin{frame}{Non-linear association between rainfall and vector abundance and outbreak risk}
     \centering
-    \footnotesize
-    \[\begin{array}{|c|c|c|c|}
-    {Day} & {Value} & {Lag-1} & {Lag-2}\\ \hline
-    1 & 10 & NA & NA \\
-    2 & 20 & 10 & NA \\
-    3 & 30 & 20 & 10 \\
-    4 & 40 & 30 & 20 \\
-    5 & 50 & 40 & 30 
-\end{array}\] 
+    \includegraphics[width=10cm,keepaspectratio]{images/nonlinear_effect_outbreaks.png}
+    \vspace{0.3cm}
+    {\footnotesize Caldwell et al. 2021, Nature Communications}
 \end{frame}
 %------------------------------------------------
-\begin{frame}{Key definitions}
-    \begin{itemize}
-        \item \alertblue{Autoregressive model}: specifies that the \alertblue{response} variable depends linearly on its own previous (\alertblue{lagged}) value(s)
-        \begin{equation*}
-            \eqnmark[blue]{node1}{y_t}=
-            \eqnmark[red]{node2}{\beta_0} +
-            \eqnmarkbox[blue]{node3}{\beta_2 y_{t - 1}} + 
-            \eqnmark[orange]{node4}{\epsilon}
-        \end{equation*}
-        \annotate[yshift=-0.4em]{below, left}{node1}{Response variable}
-        \annotate[yshift=-0.4em]{below, right}{node3}{Lagged response variable as predictor}
-        \vspace{0.3cm}
-        \item \alertblue{Distributed lag model}: specifies that the \alertblue{response} variable depends linearly on the current and (\alertblue{delayed}) lagged value(s) of predictor variables and \alert {no lagged response variables} 
-        \begin{equation*}
-            \eqnmark[blue]{node1}{y_t}=
-            \eqnmark[red]{node2}{\beta_0} +
-            \eqnmarkbox[purple]{node3}{\beta_1 x_t} + 
-            \eqnmarkbox[blue]{node4}{\beta_2 x_{t-1}} + 
-            \eqnmark[orange]{node5}{\epsilon}
-        \end{equation*}
-        \annotate[yshift=-0.4em]{below, right}{node4}{Lagged predictor}
-        \annotate[yshift=-0.4em]{below, left}{node3}{Current predictor}
-    \end{itemize}
-\end{frame}
-%------------------------------------------------
-\begin{frame}{Non-linearity}
-\begin{minipage}{0.49\textwidth}
-        \centering
-        \includegraphics[width=\linewidth]{images/nonlinear_data.jpeg} 
-    \end{minipage}
-    \hfill
-    \begin{minipage}{0.49\textwidth}
-        \centering
-        \includegraphics[width=\linewidth]{images/nonlinear_fit.jpeg} 
-    \end{minipage}
-    \begin{itemize}
-        \item Single linear function \alertblue{under-fits} non-linear data
-    \end{itemize}
-\end{frame}
-%------------------------------------------------
-\begin{frame}{Basis function (function of predictors)}
-    \begin{itemize}
-        \item Known family of \alertblue{functions or transformations} e.g polynomial functions, threshold functions, regression splines etc \alertblue{applied to a predictor X to generate basis variables}: \(b_1\)(X), \(b_2\)(X),...,\(b_K\)(X).
-    \begin{equation}
-    \eqnmark[blue]{node1}{y}=
-    \eqnmark[red]{node2}{\beta_0} +
-    \eqnmark[purple]{node3}{\beta_1 b_1 (x)} + 
-    \eqnmark[brown]{node4}{\beta_2 b_2 (x)} +...+
-    \eqnmark[red]{node5}{\beta_k b_k (x)} +
-    \eqnmark[orange]{node6}{\epsilon}
-    \end{equation}
-        \item For polynomial regression, the \alertblue{basis function} takes the form:
-    \end{itemize}
-    \begin{equation}
-        \eqnmark[blue]{node1}{b_j (x)} = 
-        \eqnmark[orange]{node2}{x^j} 
-    \end{equation}
-    \annotate[yshift=0.4em]{below, left}{node1}{polynomial function of degree j}
-    \annotate[yshift=0.4em]{below, right}{node2}{Raise predictor x to degree j}
-
-    \begin{itemize}
-        \item Substituting equation (2) in (1)
-    \end{itemize}
-    \begin{equation*}
-    \eqnmark[blue]{node1}{y}=
-    \eqnmark[red]{node2}{\beta_0} +
-    \eqnmarkbox[purple]{node3}{\beta_1 x} + 
-    \eqnmarkbox[brown]{node4}{\beta_2 x^2} + 
-    \eqnmarkbox[blue]{node5}{\beta_3 x^3} +...+
-    \eqnmarkbox[red]{node6}{\beta_k x^k} +
-    \eqnmark[orange]{node7}{\epsilon}
-\end{equation*}
-\end{frame}
-%------------------------------------------------
-\begin{frame}{Polynomial basis function}
-    \begin{itemize}
-        \item \alertblue{Extend} linear models to \alertblue{flexibly model non-linear relationships} by including polynomial terms (\(x^2\), \(x^3\),...,\(x^d\)) for a predictor
-    \end{itemize}
-\vspace{1.5em}  
-\begin{equation*}
-    \eqnmarkbox[blue]{node1}{y}=
-    \eqnmarkbox[red]{node2}{\beta_0} +
-    \eqnmarkbox[purple]{node3}{\beta_1 x} + 
-    \eqnmarkbox[orange]{node4}{\epsilon}
-\end{equation*}
-\annotate[yshift=0.4em]{left}{node1}{response variable}
-\annotate[yshift=-0.4em]{below,left}{node2}{intercept}
-\annotate[yshift=0.4em]{above, label right}{node3}{predictor}
-\annotate[yshift=-0.4em]{below, label right}{node4}{error/random term}
-\vspace{0.5em}       
-     \begin{itemize}
-        \item Create (\alertblue{extra}) predictors by raising each of the original predictors to a power
-    \end{itemize}
-\vspace{1.5em}  
-\begin{equation*}
-    \eqnmark[blue]{node1}{y_i}=
-    \eqnmark[red]{node2}{\beta_0} +
-    \eqnmarkbox[purple]{node3}{\beta_1 x} + 
-    \eqnmarkbox[brown]{node4}{\beta_2 x^2} + 
-    \eqnmarkbox[blue]{node5}{\beta_3 x^3} +...+
-    \eqnmarkbox[red]{node6}{\beta_d x^d} +
-    \eqnmark[orange]{node7}{\epsilon}
-\end{equation*}
-\annotate[yshift=0.4em]{above, left}{node3}{Linear term (degree 1)}
-\annotate[yshift=-0.4em]{below, left}{node4}{Degree 2 polynomial}
-\annotate[yshift=-0.4em]{below, right}{node5}{Degree 3 polynomial}
-\annotate[yshift=0.4em]{above, left}{node6}{Degree d polynomial}
-\vspace{1em}  
-\end{frame}
-%------------------------------------------------
-\begin{frame}{Polynomial regression}
-    \begin{itemize}
-        \item \alertblue{Unknown coefficients $\beta_1$, $\beta_2$...$\beta_d$} can be easily estimated using least squares because this is just a \alertblue{linear model with non-linear function of predictors} (\(x\), \(x^2\), \(x^3\),...,\(x^d\))
-        \item Unusual to use \(d\) greater than \alertblue{3 or 4}, \alert{overfitting and wiggly} 
-    \end{itemize}
-    \centering
-    \includegraphics[width=8cm,keepaspectratio]{images/overfit.jpg}
-\end{frame}
-%------------------------------------------------
-\section{Piecewise Polynomials}
-\begin{frame}{Modelling non-linear relationships: knots}
-    \begin{columns}
-        \begin{column}{0.65\textwidth}
-            \begin{itemize}
-                \item A first step is to "divide" the predictor into sections and generate individual regressions in each  
-                \item These divisions happen at positions called \alertblue{knots, \(\xi\)} 
-                \item \alertblue{Coefficients} change at knots, more knots in places where we feel the \alertblue{function might vary most rapidly}
-            \end{itemize}
-        \end{column}
-        \begin{column}{0.49\textwidth}
-            \centering
-            \includegraphics[width=\linewidth]{images/knots.jpeg} 
-        \end{column}
-    \end{columns}
-\end{frame}
-%------------------------------------------------
-\begin{frame}{Piecewise polynomial regression}
-     \centering
-     \begin{columns}
-         \begin{column}{0.55\textwidth}
-     {\scriptsize
-          \begin{equation*}
-             \eqnmark[blue]{node1}{y_i}=
-               \begin{cases} 
-                  \eqnmark[red]{node2}{\beta_0{}_1} + 
-                  \eqnmark[purple]{node3}{\beta_{11}x} + 
-                  \eqnmark[orange]{node4}{\epsilon} & \text{if } 
-                  \eqnmark{node5}{x < \xi_1,} \\
-                  \eqnmark[red]{node2}{\beta_0{}_2} + 
-                  \eqnmark[purple]{node3}{\beta_{12}x} + 
-                  \eqnmark[orange]{node4}{\epsilon} & \text{if } 
-                  \eqnmark{node5}{\xi_1 \geq x < \xi_2,} \\
-                  \eqnmark[red]{node2}{\beta_0{}_3} + 
-                  \eqnmark[purple]{node3}{\beta_{13}x} + 
-                  \eqnmark[orange]{node4}{\epsilon} & \text{if } 
-                  \eqnmark{node5}{\xi_2\geq x < \xi_3,} \\
-                  \eqnmark[red]{node2}{\beta_0{}_4} + 
-                  \eqnmark[purple]{node3}{\beta_{14}x} + 
-                  \eqnmark[orange]{node4}{\epsilon} & \text{if } 
-                  \eqnmark{node5}{\xi_3 \geq x < \xi_4.} 
-              \end{cases}
-          \end{equation*}
-          }
-          \end{column}
-          \begin{column}{0.5\textwidth}
-             \centering
-            \includegraphics[width=\linewidth, height=0.6\textheight, keepaspectratio]{images/piecewise_degree_1.jpeg}  
-          \end{column}      
-    \end{columns}
-    \begin{itemize}
-        \item Applying \alertblue{degree 1 polynomial basis functions} to predictor \\ X to generate \alertblue{basis variables of X, "piecewise"}
-    \end{itemize}
-\end{frame}
-%------------------------------------------------
-\begin{frame}{Piecewise polynomial regression}
-    
-    \begin{columns}
-        \begin{column}{0.47\textwidth}
-            \centering
-            \includegraphics[width=\linewidth]{images/piecewise_degree_2.jpeg} 
-        \end{column}
-        \begin{column}{0.47\textwidth}
-            \centering
-            \includegraphics[width=\linewidth]{images/piecewise_degree_3.jpeg} 
-        \end{column}
-    \end{columns}  
-    \begin{itemize}
-        \item A major pathology to notice in all of the above examples is the \alertblue{discontinuity} at the knots (\alertblue{unconstrained polynomials}) 
-        \item Unconstrained here means \alertblue{no restrictions of continuity imposed} at knots
-    \end{itemize}
-\end{frame}
-%------------------------------------------------
-\section{Regression Splines}
-\begin{frame}{Regression Splines}
-    \begin{itemize}
-        \item We want \alertblue{continuity} at the knots, and \alertblue{smoothness} of the overall curve, we \alertblue{impose continuity constraints} 
-        \item \alertblue{Regression spline} with knots at \alertblue{$\xi_k$, k=1,...,K} is a piecewise polynomial \alertblue{continuous at each knot}
-        \item  \alertblue{Linear spline} is represented with a basis for a linear polynomial x and one \alertblue{truncated power basis function} per knot
-        \vspace{0.5cm}
-    \end{itemize}    
-    \begin{equation*}
-        \eqnmark[blue]{node1}{y} =
-        \eqnmark[red]{node2}{\beta_0} +
-        \eqnmarkbox[purple]{node3}{\beta_1 x} +
-        \sum_{k=1}^{K} \eqnmarkbox[brown]{node4}{\beta_k (x - \xi_k)_+} +
-        \eqnmark[orange]{node5}{\epsilon}
-    \end{equation*}
-    \annotate[yshift=1.2em]{above, right}{node3}{Linear polynomial term (degree 1)}
-    \annotate[yshift=-0.8em]{below, right}{node4}{Truncated power basis}
-    \begin{itemize}
-        \item Ensures \alertblue{continuity} at knots
-    \end{itemize}
-\end{frame}
-%------------------------------------------------
-\begin{frame}{Truncated power basis function}
- \begin{columns}
-     \begin{column}{0.6\textwidth} 
-         \centering
-         \includegraphics[width=6.5cm,keepaspectratio]{images/truncated_linear.png}
-     \end{column}
-     \begin{column}{0.5\textwidth} 
-         \begin{itemize}
-             \item Truncated power basis function is \alertblue{zero} for \alertblue{\( x < \xi_k \)} and \alertblue{nonzero} only for \alertblue{\( x \geq \xi_k \)}
-         \end{itemize}
-         \begin{equation*}
-             \alertblue{(x - \xi)_+} =
-             \begin{cases}
-                 \alertblue{(x - \xi)}, & \text{if } x \geq \xi \\
-                 \textcolor{red}{0}, & \text{otherwise}
-             \end{cases}
-         \end{equation*}
-         \begin{itemize}
-             \item Linear spline representation using truncated power basis function at \alertblue{knot, \(\xi\) = 0.6}
-         \end{itemize}
-     \end{column}
- \end{columns}
-\end{frame}
-%------------------------------------------------
-% \begin{frame}{Truncated Power Basis Function}
-%  \begin{columns}
-%      \begin{column}{0.6\textwidth} 
-%          \centering
-%          \includegraphics[width=6.5cm,keepaspectratio]{images/truncated_cubic.png}
-%      \end{column}
-%      \begin{column}{0.5\textwidth} 
-%          \begin{itemize}
-%              \item Truncated power basis function is \alertblue{zero} for \alertblue{\( x < \xi_k \)} and \alertblue{nonzero} only for \alertblue{\( x \geq \xi_k \)}
-%          \end{itemize}
-%          \begin{equation*}
-%              \alertblue{(x - \xi)^3_+} =
-%              \begin{cases}
-%                  \alertblue{(x - \xi)^3}, & \text{if } x \geq \xi \\
-%                  \textcolor{red}{0}, & \text{otherwise}
-%              \end{cases}
-%          \end{equation*}
-%          \begin{itemize}
-%              \item Cubic spline representation using truncated power basis function at \alertblue{knot, \(\xi\) = 0.6}
-%          \end{itemize}
-%      \end{column}
-
-%  \end{columns}
-% \end{frame}
-% %------------------------------------------------
-\begin{frame}{Linear spline}%{$C^0$ Continuity}
-    % \begin{itemize}
-    %     \item \alertblue{Function values} must match at each knot, $\xi$, meaning there are \alertblue{no gaps or jumps} e.g for a \alertblue{linear spline}
-    % \end{itemize}
-        \begin{equation*}
-            \eqnmark[blue]{node1}{y} =
-            \eqnmark[red]{node2}{\beta_0} +
-            \eqnmarkbox[purple]{node3}{\beta_1 x} +
-            \eqnmarkbox[brown]{node4}{\beta_2 (x - \xi)_+} +
-            \eqnmark[orange]{node5}{\epsilon}
-        \end{equation*}
-        \annotate[yshift=0.5em]{above, left}{node4}{Ensures continuity at knots}
-
-    \begin{columns}
-        \begin{column}{0.45\textwidth}
-            \centering
-            \includegraphics[width=\linewidth]{images/linear_spline.jpeg} 
-        \end{column}
-        \begin{column}{0.7\textwidth}
-            {\scriptsize
-             \begin{equation*}
-             \eqnmark[blue]{node1}{y}=
-               \begin{cases} 
-                  \eqnmark[red]{node2}{\beta_0} + 
-                  \eqnmark[purple]{node3}{\beta_1 x} + 
-                  \eqnmark[orange]{node4}{\epsilon} & \text{if } 
-                  \eqnmark{node5}{x < \xi_1,} \\
-                  \eqnmark[red]{node2}{..} + 
-                  \eqnmark[blue]{node3}{\beta_2 (x - \xi_1) } +
-                  \eqnmark[orange]{node4}{\epsilon} & \text{if } 
-                  \eqnmark{node5}{\xi_1 \geq x < \xi_2,} \\
-                  \eqnmark[red]{node2}{...} + 
-                  \eqnmark[blue]{node3}{\beta_3 (x - \xi_2)} +
-                  \eqnmark[orange]{node4}{\epsilon} & \text{if } 
-                  \eqnmark{node5}{\xi_2\geq x < \xi_3,} \\
-                  \eqnmark[red]{node2}{....} + 
-                  \eqnmark[blue]{node3}{\beta_4 (x - \xi_3)} +
-                  \eqnmark[orange]{node4}{\epsilon} & \text{if } 
-                  \eqnmark{node5}{\xi_3 \geq x < \xi_4.} 
-              \end{cases}
-          \end{equation*}
-          }
-        \end{column}
-    \end{columns}
-    \begin{itemize}
-        \item \alertblue{\( \xi_1 \geq x < \xi_2 \)}, first truncated basis \alertblue{activated}, \alert{adding a slope change} 
-    \end{itemize} 
-\end{frame}
-%------------------------------------------------
-\begin{frame}{Quadratic vs cubic spline}
-\begin{columns}
-    \begin{column}{0.5\textwidth}
-        \centering
-        \includegraphics[width=\linewidth]{images/quadratic_spline.jpeg} 
-    \end{column}
-    \begin{column}{0.5\textwidth}
-        \centering
-        \includegraphics[width=\linewidth]{images/cubic_spline.jpeg} 
-    \end{column}
-\end{columns}
-    \begin{itemize}
-        \item The \alertblue{cubic spline} has a \alertblue{more smooth curvature} and \alertblue{fits the data better} than the \alertblue{quadratic spline}  
-    \end{itemize}
-\end{frame}
-%------------------------------------------------
-% \begin{frame}{$C^1$ Continuity}
-%      \begin{itemize}
-%          \item \alertblue{First derivative} must be continuous at each knot, $\xi$, ensuring \alertblue{no abrupt changes in curvature/direction i.e no sharp ends} e.g for a \alertblue{quadratic spline}
-%      \end{itemize}    
-%     \begin{columns}
-%         \begin{column}{0.5\textwidth}
-%             \centering
-%             \includegraphics[width=\linewidth]{images/quadratic_spline.jpeg} 
-%         \end{column}
-%         \begin{column}{0.65\textwidth}
-%             \begin{equation*}
-%            \alertblue{(x - \xi)^2_+} = 
-%            \begin{cases} 
-%            \alertblue{(x - \xi)^2}, & x > \xi \\ 
-%            0, & x \leq \xi 
-%            \end{cases}
-%         \end{equation*}
-        
-%         \begin{equation*}
-%          \alertblue{\frac{d}{dx}(x - \xi)^2_+} = 
-%          \begin{cases} 
-%          \alertblue{2(x - \xi)}, & x > \xi \\ 
-%          0, & x \leq \xi 
-%          \end{cases}
-%        \end{equation*} 
-%         \end{column}
-%     \end{columns}
-% \end{frame}
-% %------------------------------------------------
-% \begin{frame}{$C^2$ Continuity}
-%     \begin{itemize}
-%         \item \alertblue{Second derivative} must be continuous at each knot, $\xi$, ensuring \alertblue{ smooth curvature} e.g for a \alertblue{cubic spline}
-%     \end{itemize}        
-%     \begin{columns}
-%     \begin{column}{0.5\textwidth}
-%             \centering
-%             \includegraphics[width=\linewidth]{images/cubic_spline.jpeg} 
-%         \end{column}
-%         \begin{column}{0.7\textwidth}
-%         \begin{equation*}
-%            \alertblue{(x - \xi)^3_+} = 
-%            \begin{cases} 
-%            \alertblue{(x - \xi)^3}, & x > \xi \\ 
-%            0, & x \leq \xi 
-%            \end{cases}
-%         \end{equation*}
-        
-%         \begin{equation*}
-%          \alertblue{\frac{d}{dx}(x - \xi)^3_+} = 
-%          \begin{cases} 
-%          \alertblue{3(x - \xi)^2}, & x > \xi \\ 
-%          0, & x \leq \xi 
-%          \end{cases}
-%        \end{equation*}
-
-%        \begin{equation*}
-%          \alertblue{\frac{d^2}{dx^2}(x - \xi)^3_+} = 
-%          \begin{cases} 
-%          \alertblue{6(x - \xi)}, & x > \xi \\ 
-%          0, & x \leq \xi 
-%          \end{cases}
-%        \end{equation*}
-%       \end{column}
-%         \end{columns}
-%     \begin{itemize}   
-%         \item The cubic spline has a \alertblue{more smooth curvature} and \alertblue{fits the data better} than the quadratic spline 
-%     \end{itemize}    
-% \end{frame}
-% %------------------------------------------------
-% \begin{frame}{Comparison of Splines}
-%     \centering
-%     \includegraphics[width=11cm,keepaspectratio]{images/comparison_splines.png}
-%     \begin{itemize}
-%         \item Cubic splines, seem to be the best tool we have so far, right? \alertblue{Well, there is always room for improvement}
-%     \end{itemize}
-% \end{frame}
-%------------------------------------------------
-\begin{frame}{Limitation of these splines}
-    \begin{itemize}
-        \item Cubic splines, seem to be the best tool we have so far, right? \alertblue{Well, there is always room for improvement!} 
-        \vspace{0.2cm}
-        \item \alertblue{Have high variance at the outer range of the
-        predictors} – when X takes on either a very small or very large value
-    \end{itemize}
-    \vspace{0.2cm}
-    \centering
-    \includegraphics[width=10cm]{images/cubic_splines_issue.png}
-\end{frame}
-%------------------------------------------------
-\begin{frame}{Natural (restricted) cubic spline}
-    \begin{itemize}
-        \item \alertblue{Natural cubic spline}: cubic spline with \alertblue{additional boundary constraints, enforcing linearity beyond boundary knots} 
-        \item Produce more \alertblue{stable estimates at boundaries (narrower confidence intervals)} than cubic splines
-    \end{itemize}
-    \centering
-    \includegraphics[width=6cm]{images/cubic_vs_natural.png}
-    \begin{itemize}
-        \item \textbf{\alertblue{How are these concepts used in DLNMs?}}
-    \end{itemize}
-\end{frame}
-%------------------------------------------------
-% \begin{frame}{Natural (Restricted) Cubic Spline}
-%     \begin{itemize}
-%         \item Ensures linearity beyond the boundary by \alertblue{enforcing the second derivative of cubic splines to be zero at the boundary knots}
-%         \begin{equation*}
-%             \alertblue{\left. \frac{d^2 f}{d x^2} \right|_{x<\xi_1}} = 0, \quad
-%             \alertblue{\left. \frac{d^2 f}{d x^2} \right|_{x_n>\xi_k}} = 0
-%         \end{equation*}
-%         \item Use lower-degree (\alertblue{3}) polynomials making them more flexible (\alertblue{less wiggles and overfitting}) and therefore \alertblue{computationally efficient}
-%         \item Splines provide a transparent and interpretable fit (\alertblue{linear in coefficients with non-linear function of predictors})
-%         \vspace{0.5cm}
-%         \item \textbf{\alertblue{How are these concepts used in DLNMs?}}
-%     \end{itemize}
-% \end{frame}
-%------------------------------------------------
-\section{Concept}
 \begin{frame}{DLNMs: Conceptual model}
 \begin{figure}
     \centering
     \begin{minipage}{0.2\linewidth}
         \includegraphics[width=\linewidth]{images/rainfall.jpg}
-        \caption{\footnotesize Heavy rainfall \textbf{(Exposure)}}
+        \caption{\footnotesize Rainfall \textbf{(Exposure)}}
     \end{minipage}
     \hspace{0.5cm}
     \begin{tikzpicture}
@@ -538,7 +82,7 @@
     \centering
     \begin{minipage}{0.2\linewidth}
         \includegraphics[width=\linewidth]{images/rainfall.jpg}
-        \caption{\footnotesize Heavy rainfall \textbf{(Exposure)}}
+        \caption{\footnotesize Rainfall \textbf{(Exposure)}}
     \end{minipage}
     \hspace{0.5cm}
     \begin{tikzpicture}
@@ -553,10 +97,478 @@
 \end{figure}
 \end{frame}
 %------------------------------------------------
-\begin{frame}{DLNMs: Conceptual model}
+\section{Concepts}
+\begin{frame}{Key definitions}
+   \begin{itemize}
+    \item \alertblue{\textbf{Non-linear data associations}}: data where there is no linear relationship between a dependent (\alertblue{\textbf{outcome/response}}) and an independent (\alertblue{\textbf{exposure/predictor}}) variable \\
+    \item \alertblue{\textbf{Time series data}}: a sequence of data points collected \alertblue{\textbf{over an interval of time}} e.g daily rainfall measurements, weekly sales \\
+    \item \alertblue{\textbf{Lag}}: time difference between two observations in a sequence
+    \end{itemize}
+    \vspace{0.25cm}
+    \centering
+    \[\begin{array}{|c|c|c|c|}
+    {Day} & {Value} & {Lag-1} & {Lag-2}\\ \hline
+    1 & 10 & NA & NA \\
+    2 & 20 & 10 & NA \\
+    3 & 30 & 20 & 10 \\
+    4 & 40 & 30 & 20 \\
+    5 & 50 & 40 & 30 
+\end{array}\] 
+\end{frame}
+%------------------------------------------------
+\begin{frame}{Key definitions}
     \begin{itemize}
-        \item DLNMs capture a detailed representation of the \alertblue{time-course} of the \alertblue{exposure-\textbf{lag}-response relationship} 
-         \item Risk associated with individual exposure events at each lag \alertblue{assigned a weight} that contributes to \alertblue{overall cumulative risk}
+        \item \alertblue{\textbf{Basis}}: known family of \alertblue{\textbf{functions/transformations}} e.g polynomials, thresholds, splines etc \alertblue{\textbf{applied to a predictor X to generate basis variables}}: \(b_1\)(X), \(b_2\)(X)\ldots\(b_k\)(X).
+    \begin{equation}
+    \eqnmark[blue]{node1}{y}=
+    \eqnmark[red]{node2}{\beta_0} +
+    \eqnmark[purple]{node3}{\beta_1 b_1 (x)} + 
+    \eqnmark[brown]{node4}{\beta_2 b_2 (x)} +...+
+    \eqnmark[red]{node5}{\beta_k b_k (x)} +
+    \eqnmark[orange]{node6}{\epsilon}
+    \end{equation}
+        \item \alertblue{\textbf{Basis function}} for polynomial takes the form:
+    \end{itemize}
+    \begin{equation}
+        \eqnmark[blue]{node1}{b_j (x)} = 
+        \eqnmark[orange]{node2}{x^j} 
+    \end{equation}
+    \annotate[yshift=0.4em]{below, left}{node1}{polynomial function of degree j}
+    \annotate[yshift=0.4em]{below, right}{node2}{Raise predictor x to degree j}
+
+    \begin{itemize}
+        \item Substituting equation (2) in (1)
+    \end{itemize}
+    \begin{equation*}
+    \eqnmark[blue]{node1}{y}=
+    \eqnmark[red]{node2}{\beta_0} +
+    \eqnmarkbox[purple]{node3}{\beta_1 x} + 
+    \eqnmarkbox[brown]{node4}{\beta_2 x^2} + 
+    \eqnmarkbox[blue]{node5}{\beta_3 x^3} +...+
+    \eqnmarkbox[red]{node6}{\beta_d x^d} +
+    \eqnmark[orange]{node7}{\epsilon}
+    \end{equation*}
+    \annotate[yshift=-0.4em]{below, left}{node3}{Degree 1 (linear term)}
+    \annotate[yshift=-0.4em]{below, right}{node4}{Degree 2 polynomial}
+    \annotate[yshift=0.4em]{above, right}{node5}{Degree 3 polynomial}
+    \annotate[yshift=-0.4em]{below, right}{node6}{Degree d polynomial}
+\end{frame}
+%------------------------------------------------
+% \begin{frame}{Key definitions}
+%     \begin{itemize}
+%         \item \alertblue{Autoregressive model}: specifies that the \alertblue{response} variable depends linearly on its own previous (\alertblue{lagged}) value(s)
+%         \begin{equation*}
+%             \eqnmark[blue]{node1}{y_t}=
+%             \eqnmark[red]{node2}{\beta_0} +
+%             \eqnmarkbox[blue]{node3}{\beta_2 y_{t - 1}} + 
+%             \eqnmark[orange]{node4}{\epsilon}
+%         \end{equation*}
+%         \annotate[yshift=-0.4em]{below, left}{node1}{Response variable}
+%         \annotate[yshift=-0.4em]{below, right}{node3}{Lagged response variable as predictor}
+%         \vspace{0.3cm}
+%         \item \alertblue{Distributed lag model}: specifies that the \alertblue{response} variable depends linearly on the current and (\alertblue{delayed}) lagged value(s) of predictor variables and \alert {no lagged response variables} 
+%         \begin{equation*}
+%             \eqnmark[blue]{node1}{y_t}=
+%             \eqnmark[red]{node2}{\beta_0} +
+%             \eqnmarkbox[purple]{node3}{\beta_1 x_t} + 
+%             \eqnmarkbox[blue]{node4}{\beta_2 x_{t-1}} + 
+%             \eqnmark[orange]{node5}{\epsilon}
+%         \end{equation*}
+%         \annotate[yshift=-0.4em]{below, right}{node4}{Lagged predictor}
+%         \annotate[yshift=-0.4em]{below, left}{node3}{Current predictor}
+%     \end{itemize}
+% \end{frame}
+% %------------------------------------------------
+% \begin{frame}{Non-linearity}
+% \begin{minipage}{0.49\textwidth}
+%         \centering
+%         \includegraphics[width=\linewidth]{images/nonlinear_data.jpeg} 
+%     \end{minipage}
+%     \hfill
+%     \begin{minipage}{0.49\textwidth}
+%         \centering
+%         \includegraphics[width=\linewidth]{images/nonlinear_fit.jpeg} 
+%     \end{minipage}
+%     \begin{itemize}
+%         \item Single linear function \alertblue{under-fits} non-linear data \\ associations 
+%     \end{itemize}
+% \end{frame}
+
+% %------------------------------------------------
+% \begin{frame}{Polynomial basis function}
+%     \begin{itemize}
+%         \item \alertblue{Extend} linear models to \alertblue{flexibly model non-linear relationships} by including polynomial terms (\(x^2\), \(x^3\),...,\(x^d\)) for a predictor
+%     \end{itemize}
+% \vspace{1.5em}  
+% \begin{equation*}
+%     \eqnmarkbox[blue]{node1}{y}=
+%     \eqnmarkbox[red]{node2}{\beta_0} +
+%     \eqnmarkbox[purple]{node3}{\beta_1 x} + 
+%     \eqnmarkbox[orange]{node4}{\epsilon}
+% \end{equation*}
+% \annotate[yshift=0.4em]{left}{node1}{response variable}
+% \annotate[yshift=-0.4em]{below,left}{node2}{intercept}
+% \annotate[yshift=0.4em]{above, label right}{node3}{predictor}
+% \annotate[yshift=-0.4em]{below, label right}{node4}{error/random term}
+% \vspace{0.5em}       
+%      \begin{itemize}
+%         \item Create (\alertblue{extra}) predictors by raising each of the original predictors to a power
+%     \end{itemize}
+% \vspace{1.5em}  
+% \begin{equation*}
+%     \eqnmark[blue]{node1}{y_i}=
+%     \eqnmark[red]{node2}{\beta_0} +
+%     \eqnmarkbox[purple]{node3}{\beta_1 x} + 
+%     \eqnmarkbox[brown]{node4}{\beta_2 x^2} + 
+%     \eqnmarkbox[blue]{node5}{\beta_3 x^3} +...+
+%     \eqnmarkbox[red]{node6}{\beta_d x^d} +
+%     \eqnmark[orange]{node7}{\epsilon}
+% \end{equation*}
+% \annotate[yshift=0.4em]{above, left}{node3}{Linear term (degree 1)}
+% \annotate[yshift=-0.4em]{below, left}{node4}{Degree 2 polynomial}
+% \annotate[yshift=-0.4em]{below, right}{node5}{Degree 3 polynomial}
+% \annotate[yshift=0.4em]{above, left}{node6}{Degree d polynomial}
+% \vspace{1em}  
+% \end{frame}
+% %------------------------------------------------
+\begin{frame}{Modelling non-linear data associations}
+    \begin{itemize}
+        \item \alertblue{\textbf{Polynomials}} and \alertblue{\textbf{splines (degree 3 polynomials)}} are the most common \alertblue{\textbf{basis}} used to fit non-linear associations 
+        \item Unusual to use \(d\) greater than \alertblue{\textbf{3 or 4, overfitting and wiggly}} 
+    \end{itemize}
+    \centering
+    \includegraphics[width=9.5cm,keepaspectratio]{images/overfit.jpg}
+\end{frame}
+%------------------------------------------------
+% \section{Piecewise Polynomials}
+% \begin{frame}{Modelling non-linear relationships: knots}
+%     \begin{columns}
+%         \begin{column}{0.65\textwidth}
+%             \begin{itemize}
+%                 \item A first step is to "divide" the predictor into sections and generate individual regressions in each  
+%                 \item These divisions happen at positions called \alertblue{knots, \(\xi\)} 
+%                 \item \alertblue{Coefficients} change at knots, more knots in places where we feel the \alertblue{function might vary most rapidly}
+%             \end{itemize}
+%         \end{column}
+%         \begin{column}{0.49\textwidth}
+%             \centering
+%             \includegraphics[width=\linewidth]{images/knots.jpeg} 
+%         \end{column}
+%     \end{columns}
+% \end{frame}
+% %------------------------------------------------
+% \begin{frame}{Piecewise polynomial regression}
+%      \centering
+%      \begin{columns}
+%          \begin{column}{0.55\textwidth}
+%      {\scriptsize
+%           \begin{equation*}
+%              \eqnmark[blue]{node1}{y_i}=
+%                \begin{cases} 
+%                   \eqnmark[red]{node2}{\beta_0{}_1} + 
+%                   \eqnmark[purple]{node3}{\beta_{11}x} + 
+%                   \eqnmark[orange]{node4}{\epsilon} & \text{if } 
+%                   \eqnmark{node5}{x < \xi_1,} \\
+%                   \eqnmark[red]{node2}{\beta_0{}_2} + 
+%                   \eqnmark[purple]{node3}{\beta_{12}x} + 
+%                   \eqnmark[orange]{node4}{\epsilon} & \text{if } 
+%                   \eqnmark{node5}{\xi_1 \geq x < \xi_2,} \\
+%                   \eqnmark[red]{node2}{\beta_0{}_3} + 
+%                   \eqnmark[purple]{node3}{\beta_{13}x} + 
+%                   \eqnmark[orange]{node4}{\epsilon} & \text{if } 
+%                   \eqnmark{node5}{\xi_2\geq x < \xi_3,} \\
+%                   \eqnmark[red]{node2}{\beta_0{}_4} + 
+%                   \eqnmark[purple]{node3}{\beta_{14}x} + 
+%                   \eqnmark[orange]{node4}{\epsilon} & \text{if } 
+%                   \eqnmark{node5}{\xi_3 \geq x < \xi_4.} 
+%               \end{cases}
+%           \end{equation*}
+%           }
+%           \end{column}
+%           \begin{column}{0.5\textwidth}
+%              \centering
+%             \includegraphics[width=\linewidth, height=0.6\textheight, keepaspectratio]{images/piecewise_degree_1.jpeg}  
+%           \end{column}      
+%     \end{columns}
+%     \begin{itemize}
+%         \item Applying \alertblue{degree 1 polynomial basis functions} to predictor \\ X to generate \alertblue{basis variables of X, "piecewise"}
+%     \end{itemize}
+% \end{frame}
+% %------------------------------------------------
+% \begin{frame}{Piecewise polynomial regression}
+    
+%     \begin{columns}
+%         \begin{column}{0.47\textwidth}
+%             \centering
+%             \includegraphics[width=\linewidth]{images/piecewise_degree_2.jpeg} 
+%         \end{column}
+%         \begin{column}{0.47\textwidth}
+%             \centering
+%             \includegraphics[width=\linewidth]{images/piecewise_degree_3.jpeg} 
+%         \end{column}
+%     \end{columns}  
+%     \begin{itemize}
+%         \item A major pathology to notice in all of the above examples is the \alertblue{discontinuity} at the knots (\alertblue{unconstrained polynomials}) 
+%         \item Unconstrained here means \alertblue{no restrictions of continuity imposed} at knots
+%     \end{itemize}
+% \end{frame}
+% %------------------------------------------------
+% \section{Regression Splines}
+% \begin{frame}{Regression Splines}
+%     \begin{itemize}
+%         \item We want \alertblue{continuity} at the knots, and \alertblue{smoothness} of the overall curve, we \alertblue{impose continuity constraints} 
+%         \item \alertblue{Regression spline} with knots at \alertblue{$\xi_k$, k=1,...,K} is a piecewise polynomial \alertblue{continuous at each knot}
+%         \item  \alertblue{Linear spline} is represented with a basis for a linear polynomial x and one \alertblue{truncated power basis function} per knot
+%         \vspace{0.5cm}
+%     \end{itemize}    
+%     \begin{equation*}
+%         \eqnmark[blue]{node1}{y} =
+%         \eqnmark[red]{node2}{\beta_0} +
+%         \eqnmarkbox[purple]{node3}{\beta_1 x} +
+%         \sum_{k=1}^{K} \eqnmarkbox[brown]{node4}{\beta_k (x - \xi_k)_+} +
+%         \eqnmark[orange]{node5}{\epsilon}
+%     \end{equation*}
+%     \annotate[yshift=1.2em]{above, right}{node3}{Linear polynomial term (degree 1)}
+%     \annotate[yshift=-0.8em]{below, right}{node4}{Truncated power basis}
+%     \begin{itemize}
+%         \item Ensures \alertblue{continuity} at knots
+%     \end{itemize}
+% \end{frame}
+% %------------------------------------------------
+% \begin{frame}{Truncated power basis function}
+%  \begin{columns}
+%      \begin{column}{0.6\textwidth} 
+%          \centering
+%          \includegraphics[width=6.5cm,keepaspectratio]{images/truncated_linear.png}
+%      \end{column}
+%      \begin{column}{0.5\textwidth} 
+%          \begin{itemize}
+%              \item Truncated power basis function is \alertblue{zero} for \alertblue{\( x < \xi_k \)} and \alertblue{nonzero} only for \alertblue{\( x \geq \xi_k \)}
+%          \end{itemize}
+%          \begin{equation*}
+%              \alertblue{(x - \xi)_+} =
+%              \begin{cases}
+%                  \alertblue{(x - \xi)}, & \text{if } x \geq \xi \\
+%                  \textcolor{red}{0}, & \text{otherwise}
+%              \end{cases}
+%          \end{equation*}
+%          \begin{itemize}
+%              \item Linear spline representation using truncated power basis function at \alertblue{knot, \(\xi\) = 0.6}
+%          \end{itemize}
+%      \end{column}
+%  \end{columns}
+% \end{frame}
+% %------------------------------------------------
+% % \begin{frame}{Truncated Power Basis Function}
+% %  \begin{columns}
+% %      \begin{column}{0.6\textwidth} 
+% %          \centering
+% %          \includegraphics[width=6.5cm,keepaspectratio]{images/truncated_cubic.png}
+% %      \end{column}
+% %      \begin{column}{0.5\textwidth} 
+% %          \begin{itemize}
+% %              \item Truncated power basis function is \alertblue{zero} for \alertblue{\( x < \xi_k \)} and \alertblue{nonzero} only for \alertblue{\( x \geq \xi_k \)}
+% %          \end{itemize}
+% %          \begin{equation*}
+% %              \alertblue{(x - \xi)^3_+} =
+% %              \begin{cases}
+% %                  \alertblue{(x - \xi)^3}, & \text{if } x \geq \xi \\
+% %                  \textcolor{red}{0}, & \text{otherwise}
+% %              \end{cases}
+% %          \end{equation*}
+% %          \begin{itemize}
+% %              \item Cubic spline representation using truncated power basis function at \alertblue{knot, \(\xi\) = 0.6}
+% %          \end{itemize}
+% %      \end{column}
+
+% %  \end{columns}
+% % \end{frame}
+% % %------------------------------------------------
+% \begin{frame}{Linear spline}%{$C^0$ Continuity}
+%     % \begin{itemize}
+%     %     \item \alertblue{Function values} must match at each knot, $\xi$, meaning there are \alertblue{no gaps or jumps} e.g for a \alertblue{linear spline}
+%     % \end{itemize}
+%         \begin{equation*}
+%             \eqnmark[blue]{node1}{y} =
+%             \eqnmark[red]{node2}{\beta_0} +
+%             \eqnmarkbox[purple]{node3}{\beta_1 x} +
+%             \eqnmarkbox[brown]{node4}{\beta_2 (x - \xi)_+} +
+%             \eqnmark[orange]{node5}{\epsilon}
+%         \end{equation*}
+%         \annotate[yshift=0.5em]{above, left}{node4}{Ensures continuity at knots}
+
+%     \begin{columns}
+%         \begin{column}{0.45\textwidth}
+%             \centering
+%             \includegraphics[width=\linewidth]{images/linear_spline.jpeg} 
+%         \end{column}
+%         \begin{column}{0.7\textwidth}
+%             {\scriptsize
+%              \begin{equation*}
+%              \eqnmark[blue]{node1}{y}=
+%                \begin{cases} 
+%                   \eqnmark[red]{node2}{\beta_0} + 
+%                   \eqnmark[purple]{node3}{\beta_1 x} + 
+%                   \eqnmark[orange]{node4}{\epsilon} & \text{if } 
+%                   \eqnmark{node5}{x < \xi_1,} \\
+%                   \eqnmark[red]{node2}{..} + 
+%                   \eqnmark[blue]{node3}{\beta_2 (x - \xi_1) } +
+%                   \eqnmark[orange]{node4}{\epsilon} & \text{if } 
+%                   \eqnmark{node5}{\xi_1 \geq x < \xi_2,} \\
+%                   \eqnmark[red]{node2}{...} + 
+%                   \eqnmark[blue]{node3}{\beta_3 (x - \xi_2)} +
+%                   \eqnmark[orange]{node4}{\epsilon} & \text{if } 
+%                   \eqnmark{node5}{\xi_2\geq x < \xi_3,} \\
+%                   \eqnmark[red]{node2}{....} + 
+%                   \eqnmark[blue]{node3}{\beta_4 (x - \xi_3)} +
+%                   \eqnmark[orange]{node4}{\epsilon} & \text{if } 
+%                   \eqnmark{node5}{\xi_3 \geq x < \xi_4.} 
+%               \end{cases}
+%           \end{equation*}
+%           }
+%         \end{column}
+%     \end{columns}
+%     \begin{itemize}
+%         \item \alertblue{\( \xi_1 \geq x < \xi_2 \)}, first truncated basis \alertblue{activated}, \alert{adding a slope change} 
+%     \end{itemize} 
+% \end{frame}
+% %------------------------------------------------
+% \begin{frame}{Quadratic vs cubic spline}
+% \begin{columns}
+%     \begin{column}{0.5\textwidth}
+%         \centering
+%         \includegraphics[width=\linewidth]{images/quadratic_spline.jpeg} 
+%     \end{column}
+%     \begin{column}{0.5\textwidth}
+%         \centering
+%         \includegraphics[width=\linewidth]{images/cubic_spline.jpeg} 
+%     \end{column}
+% \end{columns}
+%     \begin{itemize}
+%         \item The \alertblue{cubic spline} has a \alertblue{more smooth curvature} and \alertblue{fits the data better} than the \alertblue{quadratic spline}  
+%     \end{itemize}
+% \end{frame}
+% %------------------------------------------------
+% % \begin{frame}{$C^1$ Continuity}
+% %      \begin{itemize}
+% %          \item \alertblue{First derivative} must be continuous at each knot, $\xi$, ensuring \alertblue{no abrupt changes in curvature/direction i.e no sharp ends} e.g for a \alertblue{quadratic spline}
+% %      \end{itemize}    
+% %     \begin{columns}
+% %         \begin{column}{0.5\textwidth}
+% %             \centering
+% %             \includegraphics[width=\linewidth]{images/quadratic_spline.jpeg} 
+% %         \end{column}
+% %         \begin{column}{0.65\textwidth}
+% %             \begin{equation*}
+% %            \alertblue{(x - \xi)^2_+} = 
+% %            \begin{cases} 
+% %            \alertblue{(x - \xi)^2}, & x > \xi \\ 
+% %            0, & x \leq \xi 
+% %            \end{cases}
+% %         \end{equation*}
+        
+% %         \begin{equation*}
+% %          \alertblue{\frac{d}{dx}(x - \xi)^2_+} = 
+% %          \begin{cases} 
+% %          \alertblue{2(x - \xi)}, & x > \xi \\ 
+% %          0, & x \leq \xi 
+% %          \end{cases}
+% %        \end{equation*} 
+% %         \end{column}
+% %     \end{columns}
+% % \end{frame}
+% % %------------------------------------------------
+% % \begin{frame}{$C^2$ Continuity}
+% %     \begin{itemize}
+% %         \item \alertblue{Second derivative} must be continuous at each knot, $\xi$, ensuring \alertblue{ smooth curvature} e.g for a \alertblue{cubic spline}
+% %     \end{itemize}        
+% %     \begin{columns}
+% %     \begin{column}{0.5\textwidth}
+% %             \centering
+% %             \includegraphics[width=\linewidth]{images/cubic_spline.jpeg} 
+% %         \end{column}
+% %         \begin{column}{0.7\textwidth}
+% %         \begin{equation*}
+% %            \alertblue{(x - \xi)^3_+} = 
+% %            \begin{cases} 
+% %            \alertblue{(x - \xi)^3}, & x > \xi \\ 
+% %            0, & x \leq \xi 
+% %            \end{cases}
+% %         \end{equation*}
+        
+% %         \begin{equation*}
+% %          \alertblue{\frac{d}{dx}(x - \xi)^3_+} = 
+% %          \begin{cases} 
+% %          \alertblue{3(x - \xi)^2}, & x > \xi \\ 
+% %          0, & x \leq \xi 
+% %          \end{cases}
+% %        \end{equation*}
+
+% %        \begin{equation*}
+% %          \alertblue{\frac{d^2}{dx^2}(x - \xi)^3_+} = 
+% %          \begin{cases} 
+% %          \alertblue{6(x - \xi)}, & x > \xi \\ 
+% %          0, & x \leq \xi 
+% %          \end{cases}
+% %        \end{equation*}
+% %       \end{column}
+% %         \end{columns}
+% %     \begin{itemize}   
+% %         \item The cubic spline has a \alertblue{more smooth curvature} and \alertblue{fits the data better} than the quadratic spline 
+% %     \end{itemize}    
+% % \end{frame}
+% % %------------------------------------------------
+% % \begin{frame}{Comparison of Splines}
+% %     \centering
+% %     \includegraphics[width=11cm,keepaspectratio]{images/comparison_splines.png}
+% %     \begin{itemize}
+% %         \item Cubic splines, seem to be the best tool we have so far, right? \alertblue{Well, there is always room for improvement}
+% %     \end{itemize}
+% % \end{frame}
+% %------------------------------------------------
+% \begin{frame}{Limitation of these splines}
+%     \begin{itemize}
+%         \item Cubic splines, seem to be the best tool we have so far, right? \alertblue{Well, there is always room for improvement!} 
+%         \vspace{0.2cm}
+%         \item \alertblue{Have high variance at the outer range of the
+%         predictors} – when X takes on either a very small or very large value
+%     \end{itemize}
+%     \vspace{0.2cm}
+%     \centering
+%     \includegraphics[width=10cm]{images/cubic_splines_issue.png}
+% \end{frame}
+% %------------------------------------------------
+\begin{frame}{Natural (restricted) cubic spline}
+    \begin{itemize}
+        \item \alertblue{\textbf{Natural cubic spline}}: cubic spline with \alertblue{\textbf{additional boundary constraints}}, enforcing linearity beyond boundary knots
+        \item Produce more \alertblue{\textbf{stable estimates at boundaries}} (narrower confidence intervals) than cubic splines
+    \end{itemize}
+    \centering
+    \includegraphics[width=6cm]{images/cubic_vs_natural.png}
+    \begin{itemize}
+        \item \alertblue{\textbf{How are these concepts used in DLNMs?}}
+    \end{itemize}
+\end{frame}
+%------------------------------------------------
+% \begin{frame}{Natural (Restricted) Cubic Spline}
+%     \begin{itemize}
+%         \item Ensures linearity beyond the boundary by \alertblue{enforcing the second derivative of cubic splines to be zero at the boundary knots}
+%         \begin{equation*}
+%             \alertblue{\left. \frac{d^2 f}{d x^2} \right|_{x<\xi_1}} = 0, \quad
+%             \alertblue{\left. \frac{d^2 f}{d x^2} \right|_{x_n>\xi_k}} = 0
+%         \end{equation*}
+%         \item Use lower-degree (\alertblue{3}) polynomials making them more flexible (\alertblue{less wiggles and overfitting}) and therefore \alertblue{computationally efficient}
+%         \item Splines provide a transparent and interpretable fit (\alertblue{linear in coefficients with non-linear function of predictors})
+%         \vspace{0.5cm}
+%         \item \textbf{\alertblue{How are these concepts used in DLNMs?}}
+%     \end{itemize}
+% \end{frame}
+%------------------------------------------------
+\section{Stats}
+\begin{frame}{DLNMs: Modelling framework}
+    \begin{itemize}
+        \item DLNMs capture a detailed representation of the \alertblue{\textbf{time-course}} of the \alertblue{\textbf{exposure-lag-response relationship}}
+         \item Risk associated with individual exposure events at each lag \alertblue{\textbf{assigned a weight}} that contributes to \alertblue{\textbf{overall cumulative risk}}
   \end{itemize}  
     \centering
     \includegraphics[width=7.5cm,keepaspectratio]{images/delayed effect.png}
@@ -565,86 +577,50 @@
   \end{itemize} 
 \end{frame}
 %------------------------------------------------
-\begin{frame}{Exposure-lag-response associations }
-    \begin{itemize}
-        \item The risk is represented by a function \alertblue{$s(x, t)$} defined in terms of both \textbf{\alertblue{intensity}} and \textbf{\alertblue{timing}} of a series of \textbf{\alertblue{past exposures}}:
-        \vspace{0.1cm}
-        \begin{itemize}
-            \item an \textbf{\alertblue{exposure-response}} function \alertblue{$f(x)$} for \textbf{\alertblue{exposure $x$}}
-            \item a \textbf{\alertblue{lag-response}} function \alertblue{$w(\ell)$} for \textbf{\alertblue{lag $\ell$}}
-        \end{itemize}
-        \vspace{0.1cm}
-        \item Generating a \textbf{\alertblue{bi-dimensional exposure-lag-response}} function 
-        \alertblue{\( f \cdot w(\bm{x}, \ell) \)}: \\
-        \[
-        s(x, t) = \int_{\ell_0}^{L} f(x_{t-\ell}) \cdot w(\ell) \, d\ell \] \\
-        \end{itemize}
-    \begin{itemize}
-        \item Approximation obtained through a \textbf{\alertblue{discretization of the lag period into equally spaced time units}}
-    \end{itemize}
-        \[
-        s(x_{t-\ell_0}, \dots, x_{t-L}) \approx \sum_{\ell = \ell_0}^{L} f(x_{t-\ell}) \cdot w( \ell)
-        \]
-\end{frame}
-%------------------------------------------------
-\section{Stats}
 \begin{frame}{Basic model}
 \begin{itemize}
-    \item A general statistical model representation to describe the \alertblue{time series of outcomes \( Y_t \)} with \alertblue{\( t = 1, \dots, n \)} is given by
+    \item A general statistical model representation to describe the \alertblue{\textbf{time series of outcomes \( Y_t \)}} with \alertblue{\textbf{\( t = 1, \dots, n \)}} is given by: 
+    \vspace{0.3cm}
 \end{itemize}
-\vspace{0.8cm}
+\vspace{0.3cm}
 \begin{equation*}
     \eqnmark[blue]{node1}{g(\mu_t)} =
     \eqnmark[red]{node2}{\alpha} +
-    \sum_{j=1}^{J} \eqnmarkbox[purple]{node3}{s_j(x_{tj}; \beta_j)} +
+    \sum_{j=1}^{J} \eqnmarkbox[purple]{node3}{s_j(x_{tj}; \beta)} +
     \sum_{k=1}^{K} \eqnmarkbox[brown]{node4}{\gamma_k u_{tk}}
 \end{equation*}
     \annotate[yshift=1.2em]{above, left}{node1}{Link function}
     \annotate[yshift=1.2em]{above, right}{node3}{Smoothed predictor}
     \annotate[yshift=-1.2em]{below, left}{node4}{Other predictors with linear effects}
-\vspace{0.5cm}
+\vspace{0.3cm}
 \begin{itemize}
-    \item where \alertblue{\( \mu \equiv E(Y) \)}, and \( Y \) is assumed to arise from a distribution belonging to the exponential family  
-    \item \alertblue{\(x_{tj}\)} is the transformed exposure at time \alertblue{\(t\)} through basis function \alertblue{\(j\)}
-    \item \alertblue{\(\beta_j\)} is unknown coefficient of \alertblue{\(x_{tj}\)} to be estimated
+    \item \alertblue{\(x_{tj}\)} is the transformed (\alertblue{\textbf{non-linear/smoothed}}) exposure at time \alertblue{\(t\)} through basis function \alertblue{\(j\)}
+    \vspace{0.3cm}
+    \item \alertblue{\(\beta\)} is (\alertblue{\textbf{linear}}) unknown coefficient of \alertblue{\(x_{tj}\)} to be estimated
 \end{itemize}
 \end{frame}
 %------------------------------------------------
-\begin{frame}{Distributed lag models (DLMs)}
-\begin{itemize}
-    \item Response \alertblue{\(Y\)} at a given time \alertblue{\(t\)}, (\alertblue{\(Y_t\)}),  may be explained in terms of \textbf{\alertblue{past exposures \( x_{t-\ell} \)}} with \(\ell\) for lags \( \ell = \ell_0, \ldots, \ell, \ldots, L \):
-    \[q_{x_t} = [x_{t - \ell_0}, \ldots, x_{t - \ell}, \ldots, x_{t - L}]\]
-
-    \item Assuming a \textbf{\alertblue{linear exposure-response relationship}}, hence \textbf{\alertblue{DLM}}:
-    \[s(x,t; \beta) =\sum_{\ell = \ell_0}^{L} x_{t-\ell} \cdot w( \ell)
-        \Rightarrow (q_{x_t} C) \beta = w_{x_t} \beta\] 
-
-    \item \textbf{\alertblue{\( C \)}} is obtained by applying a \textbf{\alertblue{specific basis transformation}} \\
-    to the lag vector \( \ell = [\ell_0, \ldots, \ell, \ldots, L] \) 
-\end{itemize}
+\begin{frame}{Exposure-lag-response associations }
+    \begin{itemize}
+        \item The risk is represented by a function \alertblue{$s(x, t)$} defined in terms of both \textbf{\alertblue{intensity}} and \textbf{\alertblue{timing}} of a series of \textbf{\alertblue{past exposures}}:
+        \vspace{0.2cm}
+        \begin{itemize}
+            \item an \textbf{\alertblue{exposure-response}} function \alertblue{$f(x)$} for \textbf{\alertblue{exposure $x$}} 
+            \vspace{0.2cm}
+            \item a \textbf{\alertblue{lag-response}} function \alertblue{$w(\ell)$} for \textbf{\alertblue{lag $\ell$}}
+        \end{itemize}
+        \vspace{0.2cm}
+        \item Generating a \textbf{\alertblue{bi-dimensional exposure-lag-response}} function 
+        \[s(x,t) = f(x) \cdot w(\ell)\] \\
+        
+        that describes \alertblue{\textbf{simultaneously}} both the \textbf{\alertblue{intensity}} and \textbf{\alertblue{timing}} of \textbf{\alertblue{past exposures}} 
+        \end{itemize}   
 \end{frame}
 %------------------------------------------------
-\begin{frame}{Distributed lag non-linear models (DLNMs)}
-\begin{itemize}
-    \item \textbf{\alertblue{\( R_{x_t} \)}} is obtained by applying a \textbf{\alertblue{second basis transformation}} to \textbf{\alertblue{\( q_{x_t} \)}}
-
-    \item Then we define a \textbf{\alertblue{special tensor product}}:
-
-\[A_{x_t} = (1_{v_\ell} \otimes R_{x_t}) \odot (C \otimes 1_{v_x})\]
-
-which forms the \textbf{\alertblue{crossbasis}}:
-
-\[s(q_{x_t}; \beta) = (1_{v_x.v_\ell} A_{x_t}) \beta = w_{x_t} \beta\]
-
-    \item \textbf{\alertblue{The problem reduces to choosing a basis function for each \( q_{x_t} \) and \( \ell \)}}, defining \textbf{\alertblue{exposure-response}} and \textbf{\alertblue{lag-response functions}}, respectively
-\end{itemize}
-\end{frame}
-%------------------------------------------------
-\section{Crossbasis}
 \begin{frame}{Basis for exposure-response function}
     \begin{itemize}
         \item Given, a timeseries of exposure X and assuming a \alertblue{\textbf{maximum lag of 2}},  we can compute, \alertblue{\(q_{xt}\)} (\alertblue{\textbf{vector of lagged exposure histories of X}})
-        \item Applying a \alertblue{\textbf{linear transformation}} to \alertblue{\( q_{xt} \) } we get \alertblue{\( R_{xt}\)} \\ (\alertblue{\textbf{lagged occurrences of each of the basis variables of X}})
+        \item Applying a \alertblue{\textbf{linear transformation}} to \alertblue{\( q_{xt} \) } we get \alertblue{\( R_{xt}\)} (\alertblue{\textbf{basis variables for lagged occurrences of X}})
     \end{itemize}
     \vspace{0.5cm}
 \[
@@ -702,10 +678,15 @@ which forms the \textbf{\alertblue{crossbasis}}:
 \]
 \end{frame}
 %------------------------------------------------
+\section{Crossbasis}
 \begin{frame}{Special tensor product}
+\begin{itemize}
+    \item \alertblue{\textbf{Simultaneously}} captures the \alertblue{\textbf{intensity and timing of past exposures}}
+\end{itemize}
+\vspace{0.5cm}
 \begin{equation*}
     \eqnmark{node1}{A_{xt}} =
-    (\eqnmark[brown]{node2}{1_{vl}}
+    (\eqnmark[brown]{node2}{1_{v\ell}}
     \eqnmark[blue]{node3}{\otimes} 
     \eqnmark{node4}{R_{xt}})
     \eqnmark[purple]{node5}{\odot} 
@@ -713,11 +694,15 @@ which forms the \textbf{\alertblue{crossbasis}}:
     \eqnmark[blue]{node7}{\otimes} 
     \eqnmark[orange]{node8}{1_{vx}})
 \end{equation*}
-    \annotate[yshift=0.5em]{above, right}{node3}{Kronecker product (matrix direct product)}
-    \annotate[yshift=-0.5em]{below, left}{node5}{Hadamard product (element-wise product)}
+    \annotate[yshift=-0.5em]{below, right}{node7}{Kronecker product}
+    \annotate[yshift=-0.5em]{below, left}{node5}{Hadamard product}
 \vspace{0.5cm}
 \begin{itemize}
+     \item \( 1_{v\ell}\): Vector of 1's of dimensional length of lag vector
+\[\ell(0,1,2) \Rightarrow 1_{v\ell} =  [1,1,1] \]
+
     \item \( 1_{vx}\): Vector of 1's of dimensional length of exposure vector
+\footnotesize    
 \[
 \begin{array}{|c|c|}
     t & x  \\ \hline
@@ -734,11 +719,9 @@ which forms the \textbf{\alertblue{crossbasis}}:
     1 \\
     1 \\
     1 \\
-\end{bmatrix}
-\]
-    \item \( 1_{v\ell}\): Vector of 1's of dimensional length of lag vector
-\[ \ell(0,1,2) \Rightarrow 1_{v\ell} =  [1,1,1] \]
+\end{bmatrix}\]
 \end{itemize}
+
 \end{frame}
 %------------------------------------------------
 \begin{frame}{\(1_{v\ell} \otimes R_{xt}\)}
@@ -910,6 +893,20 @@ A_{x_t}
 \end{frame}
 %------------------------------------------------
 \section{Application}
+\begin{frame}{Distributed lag non-linear models (DLNMs)}
+        \begin{itemize}
+        \item \textbf{\alertblue{Bi-dimensional exposure-lag-response}} function 
+        \alertblue{\( f(x) \cdot w(\ell) \)}: 
+        \[
+        s(x, t) = \int_{\ell_0}^{L} f(x_{t-\ell}) \cdot w(\ell) \, d\ell \] 
+        \item Approximation obtained through a \textbf{\alertblue{discretization of the lag period into equally spaced time units, \( q_{x_t} \)}}
+        \[
+        s(x_{t-\ell_0}, \dots, x_{t-L}) \approx \sum_{\ell = \ell_0}^{L} f(x_{t-\ell}) \cdot w( \ell)
+        \]
+        \item The \textbf{\alertblue{problem reduces to choosing a basis function}} for \textbf{\alertblue{exposure-response (\( q_{x_t} \))}} and \textbf{\alertblue{lag-response (\( \ell \))}} space  
+\end{itemize}
+\end{frame}
+%------------------------------------------------
 \begin{frame}{Effect of temperature and ozone on mortality}
 \centering
     \includegraphics[width=6.83cm,keepaspectratio]{images/code_example_1.png}
@@ -932,10 +929,10 @@ A_{x_t}
 \centering
     \includegraphics[width=8.8cm,keepaspectratio]{images/dlnm_example_2.png}    
 \end{frame}
-\begin{frame}{Alternative study designs}
-    \centering
-    \includegraphics[width=9cm,keepaspectratio]{images/use_cases.png}
-\end{frame}
+% \begin{frame}{Alternative study designs}
+%     \centering
+%     \includegraphics[width=9cm,keepaspectratio]{images/use_cases.png}
+% \end{frame}
 %------------------------------------------------
 \begin{frame}{References}
     \begin{itemize}
@@ -948,7 +945,7 @@ A_{x_t}
     \end{itemize}
     \vspace{1em}
     \centering
-    \textbf{\large Thank You!} \\
+    \alertblue{\textbf{\large Thank you!}} \\
     \vspace{1em}
     Slides: \href{https://github.com/arumadri/dlnm}{\alertblue{https://github.com/arumadri/dlnm}}
 \end{frame}
