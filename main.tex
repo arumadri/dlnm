@@ -13,22 +13,22 @@
 \setbeamercolor{alerted text}{fg=blue}
 %------------------------------------------------
 \setbeamertemplate{headline}{
-  \begin{beamercolorbox}[wd=\paperwidth,ht=2.5ex,dp=1.125ex]{title in head/foot}
-    \usebeamerfont{title in head/foot}\textbf{\insertshorttitle}
-  \end{beamercolorbox}
-  \begin{beamercolorbox}[wd=\paperwidth,ht=2ex,dp=1ex]{section in head/foot}
-    \hspace*{1em} 
-    \textbf{\insertsectionnavigationhorizontal{\paperwidth}{}{}} 
+        \begin{beamercolorbox}[wd=\paperwidth,ht=2.5ex,dp=1.125ex]{title in head/foot}
+        \usebeamerfont{title in head/foot}\textbf{\insertshorttitle}
+        \end{beamercolorbox}
+        \begin{beamercolorbox}[wd=\paperwidth,ht=2ex,dp=1ex]{section in head/foot}
+        \hspace*{1em} 
+        \textbf{\insertsectionnavigationhorizontal{\paperwidth}{}{}} 
   \end{beamercolorbox}
 }
 %------------------------------------------------
 \title{Distributed Lag Non-linear Models (DLNMs)}
-\subtitle{Methodology and Application to Time Series Data Analysis }
-\author{Vincent Arumadri}
-\institute{Department of Public Health \\
-\vspace{0.3cm} Erasmus MC}
-\date{8\textsuperscript{th} April, 2025}
-\logo{\includegraphics[height=1.5cm, keepaspectratio]{logo-erasmusmc-2pms-wit-uk.jpg}}
+        \subtitle{Methodology and Application to Time Series Data Analysis }
+        \author{Vincent Arumadri}
+        \institute{Department of Public Health \\
+        \vspace{0.3cm} Erasmus MC}
+        \date{8\textsuperscript{th} April, 2025}
+        \logo{\includegraphics[height=1.5cm, keepaspectratio]{logo-erasmusmc-2pms-wit-uk.jpg}}
 \setbeamertemplate{footline}{
     \begin{beamercolorbox}[wd=\paperwidth,ht=0.3cm,dp=0.2cm]{palette primary}
         \hbox{
@@ -39,11 +39,11 @@
         }
     \end{beamercolorbox}
 }
-\definecolor{darkblue1}{RGB}{25,25,112}
-\definecolor{darkblue2}{RGB}{15,15,90}
-\setbeamercolor{palette primary}{bg=darkblue1,fg=white}
-\setbeamercolor{palette secondary}{bg=darkblue1,fg=white}
-\setbeamercolor{palette tertiary}{bg=darkblue1,fg=white}
+        \definecolor{darkblue1}{RGB}{25,25,112}
+        \definecolor{darkblue2}{RGB}{15,15,90}
+        \setbeamercolor{palette primary}{bg=darkblue1,fg=white}
+        \setbeamercolor{palette secondary}{bg=darkblue1,fg=white}
+        \setbeamercolor{palette tertiary}{bg=darkblue1,fg=white}
 %------------------------------------------------
 \begin{document}
 %------------------------------------------------
@@ -53,10 +53,10 @@
 %------------------------------------------------
 \section{Motivation}
 \begin{frame}{Non-linear association between rainfall and vector abundance and outbreak risk}
-    \centering
-    \includegraphics[width=10cm,keepaspectratio]{images/nonlinear_effect_outbreaks.png}
-    \vspace{0.3cm}
-    {\footnotesize Caldwell et al. 2021, Nature Communications}
+        \centering
+        \includegraphics[width=10cm,keepaspectratio]{images/nonlinear_effect_outbreaks.png}
+        \vspace{0.3cm}
+        {\footnotesize Caldwell et al. 2021, Nature Communications}
 \end{frame}
 %------------------------------------------------
 \begin{frame}{DLNMs: Conceptual model}
@@ -99,20 +99,20 @@
 %------------------------------------------------
 \section{Concepts}
 \begin{frame}{Key definitions}
-   \begin{itemize}
-    \item \alertblue{\textbf{Non-linear data associations}}: data where there is no linear relationship between a dependent (\alertblue{\textbf{outcome/response}}) and an independent (\alertblue{\textbf{exposure/predictor}}) variable \\
-    \item \alertblue{\textbf{Time series data}}: a sequence of data points collected \alertblue{\textbf{over an interval of time}} e.g daily rainfall measurements, weekly sales \\
-    \item \alertblue{\textbf{Lag}}: time difference between two observations in a sequence
+        \begin{itemize}
+        \item \alertblue{\textbf{Non-linear data associations}}: data where there is no linear relationship between a dependent (\alertblue{\textbf{outcome/response}}) and an independent (\alertblue{\textbf{exposure/predictor}}) variable \\
+        \item \alertblue{\textbf{Time series data}}: a sequence of data points collected \alertblue{\textbf{over an interval of time}} e.g daily rainfall measurements, weekly sales \\
+        \item \alertblue{\textbf{Lag}}: time difference between two observations in a sequence
     \end{itemize}
     \vspace{0.25cm}
-    \centering
-    \[\begin{array}{|c|c|c|c|}
-    {Day} & {Value} & {Lag-1} & {Lag-2}\\ \hline
-    1 & 10 & NA & NA \\
-    2 & 20 & 10 & NA \\
-    3 & 30 & 20 & 10 \\
-    4 & 40 & 30 & 20 \\
-    5 & 50 & 40 & 30 
+        \centering
+        \[\begin{array}{|c|c|c|c|}
+        {Day} & {Value} & {Lag-1} & {Lag-2}\\ \hline
+        1 & 10 & NA & NA \\
+        2 & 20 & 10 & NA \\
+        3 & 30 & 20 & 10 \\
+        4 & 40 & 30 & 20 \\
+        5 & 50 & 40 & 30 
 \end{array}\] 
 \end{frame}
 %------------------------------------------------
@@ -120,12 +120,12 @@
     \begin{itemize}
         \item \alertblue{\textbf{Basis}}: known family of \alertblue{\textbf{functions/transformations}} e.g polynomials, thresholds, splines etc \alertblue{\textbf{applied to a predictor X to generate basis variables}}: \(b_1\)(X), \(b_2\)(X)\ldots\(b_k\)(X).
     \begin{equation}
-    \eqnmark[blue]{node1}{y}=
-    \eqnmark[red]{node2}{\beta_0} +
-    \eqnmark[purple]{node3}{\beta_1 b_1 (x)} + 
-    \eqnmark[brown]{node4}{\beta_2 b_2 (x)} +...+
-    \eqnmark[red]{node5}{\beta_k b_k (x)} +
-    \eqnmark[orange]{node6}{\epsilon}
+        \eqnmark[blue]{node1}{y}=
+        \eqnmark[red]{node2}{\beta_0} +
+        \eqnmark[purple]{node3}{\beta_1 b_1 (x)} + 
+        \eqnmark[brown]{node4}{\beta_2 b_2 (x)} +...+
+        \eqnmark[red]{node5}{\beta_k b_k (x)} +
+        \eqnmark[orange]{node6}{\epsilon}
     \end{equation}
         \item \alertblue{\textbf{Basis function}} for polynomial takes the form:
     \end{itemize}
@@ -140,13 +140,13 @@
         \item Substituting equation (2) in (1)
     \end{itemize}
     \begin{equation*}
-    \eqnmark[blue]{node1}{y}=
-    \eqnmark[red]{node2}{\beta_0} +
-    \eqnmarkbox[purple]{node3}{\beta_1 x} + 
-    \eqnmarkbox[brown]{node4}{\beta_2 x^2} + 
-    \eqnmarkbox[blue]{node5}{\beta_3 x^3} +...+
-    \eqnmarkbox[red]{node6}{\beta_d x^d} +
-    \eqnmark[orange]{node7}{\epsilon}
+        \eqnmark[blue]{node1}{y}=
+        \eqnmark[red]{node2}{\beta_0} +
+        \eqnmarkbox[purple]{node3}{\beta_1 x} + 
+        \eqnmarkbox[brown]{node4}{\beta_2 x^2} + 
+        \eqnmarkbox[blue]{node5}{\beta_3 x^3} +...+
+        \eqnmarkbox[red]{node6}{\beta_d x^d} +
+        \eqnmark[orange]{node7}{\epsilon}
     \end{equation*}
     \annotate[yshift=-0.4em]{below, left}{node3}{Degree 1 (linear term)}
     \annotate[yshift=-0.4em]{below, right}{node4}{Degree 2 polynomial}
@@ -236,8 +236,8 @@
         \item \alertblue{\textbf{Polynomials}} and \alertblue{\textbf{cubic splines (degree 3 polynomials)}} are the most common \alertblue{\textbf{basis}} used to fit non-linear associations 
         \item Unusual to use \(d\) greater than \alertblue{\textbf{3 or 4, overfitting and wiggly}} 
     \end{itemize}
-    \centering
-    \includegraphics[width=9.5cm,keepaspectratio]{images/overfit.jpg}
+        \centering
+        \includegraphics[width=9.5cm,keepaspectratio]{images/overfit.jpg}
 \end{frame}
 %------------------------------------------------
 % \section{Piecewise Polynomials}
@@ -544,7 +544,7 @@
         \item Produce more \alertblue{\textbf{stable estimates at boundaries}} (narrower confidence intervals) than cubic splines
     \end{itemize}
     \centering
-    \includegraphics[width=6cm]{images/cubic_vs_natural.png}
+        \includegraphics[width=6cm]{images/cubic_vs_natural.png}
     \begin{itemize}
         \item \alertblue{\textbf{How are these concepts used in DLNMs?}}
     \end{itemize}
@@ -571,32 +571,32 @@
          \item Risk associated with individual exposure events at each lag \alertblue{\textbf{assigned a weight}} that contributes to \alertblue{\textbf{overall cumulative risk}}
   \end{itemize}  
     \centering
-    \includegraphics[width=7.5cm,keepaspectratio]{images/delayed effect.png}
+        \includegraphics[width=7.5cm,keepaspectratio]{images/delayed effect.png}
   \begin{itemize}
-      \item \textbf{\alertblue{Statistical issue is to model this risk!}}
+        \item \textbf{\alertblue{Statistical issue is to model this risk!}}
   \end{itemize} 
 \end{frame}
 %------------------------------------------------
 \begin{frame}{Basic model}
 \begin{itemize}
-    \item A general statistical model representation to describe the \alertblue{\textbf{time series of outcomes \( Y_t \)}} with \alertblue{\textbf{\( t = 1, \dots, n \)}} is given by: 
-    \vspace{0.3cm}
+        \item A general statistical model representation to describe the \alertblue{\textbf{time series of outcomes \( Y_t \)}} with \alertblue{\textbf{\( t = 1, \dots, n \)}} is given by: 
+        \vspace{0.3cm}
 \end{itemize}
 \vspace{0.3cm}
 \begin{equation*}
-    \eqnmark[blue]{node1}{g(\mu_t)} =
-    \eqnmark[red]{node2}{\alpha} +
-    \sum_{j=1}^{J} \eqnmarkbox[purple]{node3}{s_j(x_{tj}; \beta)} +
-    \sum_{k=1}^{K} \eqnmarkbox[brown]{node4}{\gamma_k u_{tk}}
+        \eqnmark[blue]{node1}{g(\mu_t)} =
+        \eqnmark[red]{node2}{\alpha} +
+        \sum_{j=1}^{J} \eqnmarkbox[purple]{node3}{s_j(x_{tj}; \beta)} +
+        \sum_{k=1}^{K} \eqnmarkbox[brown]{node4}{\gamma_k u_{tk}}
 \end{equation*}
     \annotate[yshift=1.2em]{above, left}{node1}{Link function}
     \annotate[yshift=1.2em]{above, right}{node3}{Smoothed predictor}
     \annotate[yshift=-1.2em]{below, left}{node4}{Other predictors with linear effects}
 \vspace{0.3cm}
 \begin{itemize}
-    \item \alertblue{\(x_{tj}\)} is the transformed (\alertblue{\textbf{non-linear/smoothed}}) exposure at time \alertblue{\(t\)} through basis function \alertblue{\(j\)}
-    \vspace{0.3cm}
-    \item \alertblue{\(\beta\)} is (\alertblue{\textbf{linear}}) unknown coefficient of \alertblue{\(x_{tj}\)} to be estimated
+        \item \alertblue{\(x_{tj}\)} is the transformed (\alertblue{\textbf{non-linear/smoothed}}) exposure at time \alertblue{\(t\)} through basis function \alertblue{\(j\)}
+        \vspace{0.3cm}
+        \item \alertblue{\(\beta\)} is (\alertblue{\textbf{linear}}) unknown coefficient of \alertblue{\(x_{tj}\)} to be estimated
 \end{itemize}
 \end{frame}
 %------------------------------------------------
@@ -625,29 +625,29 @@
     \vspace{0.5cm}
 \[
 \begin{array}{|c|c|}
-    t & {x} \\ \hline
-    1 & 10  \\
-    2 & 20  \\
-    3 & 30  \\
-    4 & 40  \\
-    5 & 50  
+        t & {x} \\ \hline
+        1 & 10  \\
+        2 & 20  \\
+        3 & 30  \\
+        4 & 40  \\
+        5 & 50  
 \end{array} 
 \Rightarrow 
 \begin{array}{|c|c|c|c|}
-    \fcolorbox{white}{yellow}{lag 0} & \fcolorbox{white}{cyan}{lag 1} & \fcolorbox{white}{lime}{lag 2} \\ \hline
-    \fcolorbox{white}{yellow}{10} & \fcolorbox{white}{cyan}{NA} & \fcolorbox{white}{lime}{NA} \\
-    \fcolorbox{white}{yellow}{20}  & \fcolorbox{white}{cyan}{10} & \fcolorbox{white}{lime}{NA} \\
-    \fcolorbox{white}{yellow}{30}  & \fcolorbox{white}{cyan}{20} & \fcolorbox{white}{lime}{10} \\
-    \fcolorbox{white}{yellow}{40}  & \fcolorbox{white}{cyan}{30} & \fcolorbox{white}{lime}{20}  \\
-    \fcolorbox{white}{yellow}{50}  & \fcolorbox{white}{cyan}{40} & \fcolorbox{white}{lime}{30} 
+        \fcolorbox{white}{yellow}{lag 0} & \fcolorbox{white}{cyan}{lag 1} & \fcolorbox{white}{lime}{lag 2} \\ \hline
+        \fcolorbox{white}{yellow}{10} & \fcolorbox{white}{cyan}{NA} & \fcolorbox{white}{lime}{NA} \\
+        \fcolorbox{white}{yellow}{20}  & \fcolorbox{white}{cyan}{10} & \fcolorbox{white}{lime}{NA} \\
+        \fcolorbox{white}{yellow}{30}  & \fcolorbox{white}{cyan}{20} & \fcolorbox{white}{lime}{10} \\
+        \fcolorbox{white}{yellow}{40}  & \fcolorbox{white}{cyan}{30} & \fcolorbox{white}{lime}{20}  \\
+        \fcolorbox{white}{yellow}{50}  & \fcolorbox{white}{cyan}{40} & \fcolorbox{white}{lime}{30} 
 \end{array}
 \Rightarrow  
 \begin{bmatrix}
-\fcolorbox{white}{yellow}{10} & \fcolorbox{white}{cyan}{NA} & \fcolorbox{white}{lime}{NA} \\
-\fcolorbox{white}{yellow}{20} & \fcolorbox{white}{cyan}{10} & \fcolorbox{white}{lime}{NA} \\
-\fcolorbox{white}{yellow}{30} & \fcolorbox{white}{cyan}{20} & \fcolorbox{white}{lime}{10} \\
-\fcolorbox{white}{yellow}{40} & \fcolorbox{white}{cyan}{30} & \fcolorbox{white}{lime}{20} \\
-\fcolorbox{white}{yellow}{50} & \fcolorbox{white}{cyan}{40} & \fcolorbox{white}{lime}{30} \\
+        \fcolorbox{white}{yellow}{10} & \fcolorbox{white}{cyan}{NA} & \fcolorbox{white}{lime}{NA} \\
+        \fcolorbox{white}{yellow}{20} & \fcolorbox{white}{cyan}{10} & \fcolorbox{white}{lime}{NA} \\
+        \fcolorbox{white}{yellow}{30} & \fcolorbox{white}{cyan}{20} & \fcolorbox{white}{lime}{10} \\
+        \fcolorbox{white}{yellow}{40} & \fcolorbox{white}{cyan}{30} & \fcolorbox{white}{lime}{20} \\
+        \fcolorbox{white}{yellow}{50} & \fcolorbox{white}{cyan}{40} & \fcolorbox{white}{lime}{30} \\
 \end{bmatrix}
 \]
 \end{frame}
@@ -664,16 +664,16 @@
     \vspace{0.5cm}
 \[
 \begin{array}{|c|c|c|c|}
-    x^d & x^0 & x^1 & x^2 \\ \hline
-    \fcolorbox{white}{pink}{lag 0 (0)} & \fcolorbox{white}{pink}{1}  & \fcolorbox{white}{pink}{0}   & \fcolorbox{white}{pink}{0}   \\
-    \fcolorbox{white}{lightgray}{lag 1 (0.5)} & \fcolorbox{white}{lightgray}{1}  & \fcolorbox{white}{lightgray}{0.5} & \fcolorbox{white}{lightgray}{0.25} \\
-    \fcolorbox{white}{orange}{lag 2 (1)} & \fcolorbox{white}{orange}{1}  & \fcolorbox{white}{orange}{1}   & \fcolorbox{white}{orange}{1}  
+        x^d & x^0 & x^1 & x^2 \\ \hline
+        \fcolorbox{white}{pink}{lag 0 (0)} & \fcolorbox{white}{pink}{1}  & \fcolorbox{white}{pink}{0}   & \fcolorbox{white}{pink}{0}   \\
+        \fcolorbox{white}{lightgray}{lag 1 (0.5)} & \fcolorbox{white}{lightgray}{1}  & \fcolorbox{white}{lightgray}{0.5} & \fcolorbox{white}{lightgray}{0.25} \\
+        \fcolorbox{white}{orange}{lag 2 (1)} & \fcolorbox{white}{orange}{1}  & \fcolorbox{white}{orange}{1}   & \fcolorbox{white}{orange}{1}  
 \end{array}
 \Rightarrow C = 
 \begin{bmatrix}
-\fcolorbox{white}{pink}{1} & \fcolorbox{white}{pink}{0} & \fcolorbox{white}{pink}{0} \\
-\fcolorbox{white}{lightgray}{1} & \fcolorbox{white}{lightgray}{0.5} & \fcolorbox{white}{lightgray}{0.25} \\
-\fcolorbox{white}{orange}{1} & \fcolorbox{white}{orange}{1} & \fcolorbox{white}{orange}{1}
+        \fcolorbox{white}{pink}{1} & \fcolorbox{white}{pink}{0} & \fcolorbox{white}{pink}{0} \\
+        \fcolorbox{white}{lightgray}{1} & \fcolorbox{white}{lightgray}{0.5} & \fcolorbox{white}{lightgray}{0.25} \\
+        \fcolorbox{white}{orange}{1} & \fcolorbox{white}{orange}{1} & \fcolorbox{white}{orange}{1}
 \end{bmatrix}
 \]
 \end{frame}
@@ -681,36 +681,36 @@
 \section{Crossbasis}
 \begin{frame}{Special tensor product}
 \begin{itemize}
-    \item \alertblue{\textbf{Simultaneously}} captures the \alertblue{\textbf{intensity and timing of past exposures}}
+        \item \alertblue{\textbf{Simultaneously}} captures the \alertblue{\textbf{intensity and timing of past exposures}}
 \end{itemize}
 \vspace{0.5cm}
 \begin{equation*}
-    \eqnmark{node1}{A_{xt}} =
-    (\eqnmark[brown]{node2}{1_{v\ell}}
-    \eqnmark[blue]{node3}{\otimes} 
-    \eqnmark{node4}{R_{xt}})
-    \eqnmark[purple]{node5}{\odot} 
-    (\eqnmark{node6}{C} 
-    \eqnmark[blue]{node7}{\otimes} 
-    \eqnmark[orange]{node8}{1_{vx}})
+        \eqnmark{node1}{A_{xt}} =
+        (\eqnmark[brown]{node2}{1_{v\ell}}
+        \eqnmark[blue]{node3}{\otimes} 
+        \eqnmark{node4}{R_{xt}})
+        \eqnmark[purple]{node5}{\odot} 
+        (\eqnmark{node6}{C} 
+        \eqnmark[blue]{node7}{\otimes} 
+        \eqnmark[orange]{node8}{1_{vx}})
 \end{equation*}
     \annotate[yshift=-0.5em]{below, right}{node7}{Kronecker product}
     \annotate[yshift=-0.5em]{below, left}{node5}{Hadamard product}
 \vspace{0.5cm}
 \begin{itemize}
-     \item \( 1_{v\ell}\): Vector of 1's of dimensional length of \alertblue{\textbf{lag vector}}
-\[\ell(0,1,2) \Rightarrow 1_{v\ell} =  [1,1,1] \]
+        \item \( 1_{v\ell}\): Vector of 1's of dimensional length of \alertblue{\textbf{lag vector}}
+        \[\ell(0,1,2) \Rightarrow 1_{v\ell} =  [1,1,1] \]
 
-    \item \( 1_{vx}\): Vector of 1's of dimensional length of \alertblue{\textbf{exposure vector}}
+        \item \( 1_{vx}\): Vector of 1's of dimensional length of \alertblue{\textbf{exposure vector}}
 \footnotesize    
 \[
 \begin{array}{|c|c|}
-    t & x  \\ \hline
-    1 & 10 \\
-    2 & 20 \\
-    3 & 30 \\
-    4 & 40 \\
-    5 & 50 \\
+        t & x  \\ \hline
+        1 & 10 \\
+        2 & 20 \\
+        3 & 30 \\
+        4 & 40 \\
+        5 & 50 \\
 \end{array}
 \Rightarrow 1_{vx} =
 \begin{bmatrix}
